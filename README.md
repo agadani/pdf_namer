@@ -16,7 +16,7 @@ Example:
 
 avani@gravitas:~/Downloads $ pmv journal.pone.0094346.pdf
 
-Output writting to: /Users/avani/Desktop/To_Read/
+Output writing to: /Users/avani/Desktop/To_Read/
 
 Successfully parsed journal.pone.0094346.pdf
 
