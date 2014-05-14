@@ -5,7 +5,7 @@ Renames pdfs from various sources based on their titles, and moves them to a giv
 
 Install:
 You need to have Python installed. I have tested this on 2.6 +, but not Python3.
-You also need the Yusuke Shinyama's excellent pdfminer library, which you can
+You also need Yusuke Shinyama's excellent pdfminer library, which you can
 download here: http://www.unixuser.org/~euske/python/pdfminer/
 
 To use, make certain that pmv is executable and place it somewhere in your
@@ -14,7 +14,7 @@ rename_by_title.py to the script.  That's pretty much it!
 
 Example:
 
-avani@gravitas:~/Downloads $ pmv journal.pone.0094346.pdf
+avani@gravitas:~/Downloads $ pmv --dir ~/Desktop/To_Read journal.pone.0094346.pdf
 
 Output writing to: /Users/avani/Desktop/To_Read/
 
