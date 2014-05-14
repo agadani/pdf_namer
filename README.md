@@ -14,7 +14,6 @@ rename_by_title.py to the script.  That's pretty much it!
 
 Example:
 
-itle: Drew_Roselli_Jacob_R_Lorch_and_Thomas_E_Anderson
 avani@gravitas:~/Downloads $ pmv journal.pone.0094346.pdf
 Output writting to: /Users/avani/Desktop/To_Read/
 Successfully parsed journal.pone.0094346.pdf
