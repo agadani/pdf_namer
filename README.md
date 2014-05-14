@@ -15,8 +15,12 @@ rename_by_title.py to the script.  That's pretty much it!
 Example:
 
 avani@gravitas:~/Downloads $ pmv journal.pone.0094346.pdf
+
 Output writting to: /Users/avani/Desktop/To_Read/
+
 Successfully parsed journal.pone.0094346.pdf
+
 Rename of journal.pone.0094346.pdf complete
+
 Title:
 Capturing_NaturalColour_3D_Models_of_Insects_for_Species_Discovery_and_Diagnostics
