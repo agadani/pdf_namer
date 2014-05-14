@@ -25,9 +25,9 @@ def guess_title():
   
   while title.isdigit() or title == '' or len(title.split()) == 1 or any([x in title for x in bad_title_first_words]):
     title = pdf_text.readline().strip()
-    print title
+    #print title
   t = title.split()
-  print len(t)
+  #print len(t)
   while len(t) == 1:
     print title
     ri = raw_input('Would you like to skip this? y/n')
@@ -54,7 +54,7 @@ def sanitize(title):
   for i in title:
     if not i.isalnum() and i !='_':
       title = title.replace(i,'')
-  print title
+  #print title
   return title
 
 def get_title(fn):

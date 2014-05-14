@@ -28,7 +28,7 @@ if sys.argv[1] == '--dir':
 else: 
   paper_dir = '.'
 files = sys.argv[1:]
-print paper_dir
+print 'Saving output to',paper_dir
 for f in files:
   t = get_title(f)
   fn = title_rename(t,f)
