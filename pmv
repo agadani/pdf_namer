@@ -1,0 +1,35 @@
+#!/usr/bin/python
+import sys
+import os
+
+# Usage:
+# ./pmv <files to rename>
+# e.g. ./pmv 1020102.pdf 23510924.pdf fast_paper_10.pdf
+#
+# By default, files land in your current directory.  To specify an output 
+# directory, use the format:
+# ./pmv --dir my/output/directory <files> 
+#
+# or simply modify this file.
+
+renamepath = '' # Input the path to rename_by_title.py.  It is pure laziness
+                # that prevents this from being packaged.
+
+while renamepath == '':
+  renamepath = raw_input('Please enter the path to rename_by_title.py')
+
+sys.path.append(renamepath)           
+
+from rename_by_title import *
+if sys.argv[1] == '--dir':
+  paper_dir = sys.argv[2]
+  sys.argv.pop(1)
+  sys.argv.pop(1)
+else: 
+  paper_dir = '.'
+files = sys.argv[1:]
+print paper_dir
+for f in files:
+  t = get_title(f)
+  fn = title_rename(t,f)
+  os.rename(fn,paper_dir+fn)
