@@ -26,7 +26,7 @@ if sys.argv[1] == '--dir':
   sys.argv.pop(1)
   sys.argv.pop(1)
 else: 
-  paper_dir = '.'
+  paper_dir = './'
 files = sys.argv[1:]
 print 'Saving output to',paper_dir
 for f in files:
