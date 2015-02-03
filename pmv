@@ -12,7 +12,7 @@ import os
 #
 # or simply modify this file.
 
-renamepath = '' # Input the path to rename_by_title.py.  It is pure laziness
+renamepath = '~/code/scripts/pdf_namer/' # Input the path to rename_by_title.py.  It is pure laziness
                 # that prevents this from being packaged.
 
 while renamepath == '':
