@@ -78,7 +78,7 @@ def guess_title():
   return unicodedata.normalize('NFKD', title).encode('ascii','ignore')
 
 def sanitize(title):
-  # Remove wierd characters that are bad for whilename
+  # Remove weird characters that are bad for whilename
   for i in title:
     if not i.isalnum() and i !='_':
       title = title.replace(i,'')
