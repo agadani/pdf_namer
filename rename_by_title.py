@@ -1,7 +1,9 @@
-import sys
+import codecs
 import os
-import string
 import re
+import string
+import sys
+import unicodedata
 from pdfminer.pdfparser import PDFDocument, PDFParser
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter, process_pdf
 from pdfminer.pdfdevice import PDFDevice
@@ -28,17 +30,19 @@ def clean_up_and_lower(title_string):
 
 def guess_title():
   """Tries to guess the title given popular file formats"""
-  pdf_text = open('temp_title','r')
+  pdf_text = codecs.open('temp_title','r','utf-8')
   title = clean_up_and_lower(pdf_text.readline().strip())
   
   singles = list(string.ascii_lowercase)
   for x in ['a','i','m','n','e']:
     singles.remove(x)
-  print singles
-  bad_title_first_words=[' USA','Proceedings of','LETTER','Journal of','ARTICLE','ar ticle','Communicated by','Communicated_by','anuscript','Public Access',' S ','USENIX','PERSPECTIVES','Brevia','COMMUN ','PHYSICAL REVIEW','Conference','Symantec Research','Symposium','Vol.','IEEE','Editors','Published by','Published in','Permissions','email','doi:',] 
+  # print singles
+  bad_title_first_words=[' USA','Proceedings of','LETTER','Journal of','ARTICLE','ar ticle','Communicated by','Communicated_by','anuscript','Public Access',' S ','USENIX','PERSPECTIVES','Brevia','COMMUN ','PHYSICAL REVIEW','Conference','Symantec Research','Symposium','Vol.','IEEE','Editors','Published by','Published in','Permissions','email','doi:'] 
 
-  copyright_notice = re.compile(r'\(?c\)?\S*\s+\d{4}\s+(\w+\s*)+')
-  journal_citation = re.compile(r'(\w+\s*)+\s+\d+(\s+\(\d+\))?:\s+\d+((\xe2\x80\x93|-)\d+)?,\s+\d{4}')
+  copyright_notice = re.compile(ur'\(?c\)?\S*\s+\d{4}\s+(\w+\s*)+')
+  # Using the PyPi regex package, it would be possible to use the
+  # Unicode Dash property class rather than the literal en-dash.
+  journal_citation = re.compile(ur'(\w+\s*)+\s+\d+(\s+\(\d+\))?:\s+\d+((\u2013|-)\d+)?,\s+\d{4}')
 
   lower_bad_title = [x.lower() for x in bad_title_first_words]
 
@@ -69,7 +73,9 @@ def guess_title():
       rest += (' '+next) 
       t = next.split()
 
-  return '_'.join((title+rest).split())
+  title = '_'.join((title+rest).split())
+  # Reencode the title into ASCII after normalizing the Unicode.
+  return unicodedata.normalize('NFKD', title).encode('ascii','ignore')
 
 def sanitize(title):
   # Remove wierd characters that are bad for whilename
