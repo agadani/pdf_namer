@@ -1,6 +1,7 @@
 import sys
 import os
 import string
+import re
 from pdfminer.pdfparser import PDFDocument, PDFParser
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter, process_pdf
 from pdfminer.pdfdevice import PDFDevice
@@ -34,12 +35,14 @@ def guess_title():
   for x in ['a','i','m','n','e']:
     singles.remove(x)
   print singles
-  bad_title_first_words=[' USA','Proceedings of','LETTER','Journal of','ARTICLE','ar ticle','Communicated by','Communicated_by','anuscript','Public Access',' S ','USENIX','PERSPECTIVES','Brevia','COMMUN ','PHYSICAL REVIEW','Conference','Symantec Research','Symposium','Vol.','IEEE','Editors','Published by','Published in','Permissions','email','doi:'] 
+  bad_title_first_words=[' USA','Proceedings of','LETTER','Journal of','ARTICLE','ar ticle','Communicated by','Communicated_by','anuscript','Public Access',' S ','USENIX','PERSPECTIVES','Brevia','COMMUN ','PHYSICAL REVIEW','Conference','Symantec Research','Symposium','Vol.','IEEE','Editors','Published by','Published in','Permissions','email','doi:',] 
+
+  copyright_notice = re.compile(r'\(?c\)?\S*\s+\d{4}\s+(\w+\s*)+')
+  journal_citation = re.compile(r'(\w+\s*)+\s+\d+(\s+\(\d+\))?:\s+\d+((\xe2\x80\x93|-)\d+)?,\s+\d{4}')
 
   lower_bad_title = [x.lower() for x in bad_title_first_words]
 
-  while title.isdigit() or title == '' or len(title.split()) == 1 or any([x in
-    title for x in lower_bad_title]) or any([y in title.split() for y in singles] ):
+  while title.isdigit() or title == '' or len(title.split()) == 1 or any([x in title for x in lower_bad_title]) or any([y in title.split() for y in singles]) or copyright_notice.match(title) or journal_citation.match(title):
     title = clean_up_and_lower(pdf_text.readline().strip())
     print title
     print title.split()
