@@ -42,7 +42,7 @@ def guess_title():
   copyright_notice = re.compile(ur'\(?c\)?\S*\s+\d{4}\s+(\w+\s*)+')
   # Using the PyPi regex package, it would be possible to use the
   # Unicode Dash property class rather than the literal en-dash.
-  journal_citation = re.compile(ur'(\w+\s*)+\s+\d+(\s+\(\d+\))?:\s+\d+((\u2013|-)\d+)?,\s+\d{4}')
+  journal_citation = re.compile(ur'\w[\w\s]*\s\d+(\s+\(\d+\))?:\s+\d+((\u2013|-)\d+)?,\s+\d{4}')
 
   lower_bad_title = [x.lower() for x in bad_title_first_words]
 
