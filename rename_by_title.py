@@ -77,7 +77,7 @@ def guess_title():
         rest += (' '+next) 
         t = next.split()
 
-  title = '_'.join((title+rest).split())
+  title = '_'.join((title+rest.lower()).split())
   # Reencode the title into ASCII after normalizing the Unicode.
   return unicodedata.normalize('NFKD', title).encode('ascii','ignore')
 
