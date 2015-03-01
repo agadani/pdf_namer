@@ -30,14 +30,11 @@ def clean_up_and_lower(title_string):
 
 def guess_title():
   """Tries to guess the title given popular file formats"""
-  pdf_text = codecs.open('temp_title','r','utf-8')
-  title = clean_up_and_lower(pdf_text.readline().strip())
-  
   singles = list(string.ascii_lowercase)
   for x in ['a','i','m','n','e']:
     singles.remove(x)
   # print singles
-  bad_title_first_words=[' USA','Proceedings of','LETTER','Journal of','ARTICLE','ar ticle','Communicated by','Communicated_by','anuscript','Public Access',' S ','USENIX','PERSPECTIVES','Brevia','COMMUN ','PHYSICAL REVIEW','Conference','Symantec Research','Symposium','Vol.','IEEE','Editors','Published by','Published in','Permissions','email','doi:'] 
+  bad_title_first_words=[' USA','Proceedings of','LETTER','Journal of','ARTICLE','ar ticle','Communicated by','Communicated_by','anuscript','Public Access',' S ','USENIX','PERSPECTIVES','Brevia','COMMUN ','PHYSICAL REVIEW','Conference','Symantec Research','Symposium','Vol.','IEEE','Editors','Published by','Published in','Permissions','email','doi:']
 
   copyright_notice = re.compile(ur'\(?c\)?\S*\s+\d{4}\s+(\w+\s*)+')
   # Using the PyPi regex package, it would be possible to use the
@@ -46,32 +43,39 @@ def guess_title():
 
   lower_bad_title = [x.lower() for x in bad_title_first_words]
 
-  while title.isdigit() or title == '' or len(title.split()) == 1 or any([x in title for x in lower_bad_title]) or any([y in title.split() for y in singles]) or copyright_notice.match(title) or journal_citation.match(title):
-    title = clean_up_and_lower(pdf_text.readline().strip())
-    print title
-    print title.split()
-  print 'Good title',title
-  print title.split()
-  t = title.split()
-  print len(t)
-  while len(t) == 1:
-    print title
-    ri = raw_input('Would you like to skip this? y/n')
-    if ri == 'y':
-      title = pdf_text.readline().strip()
-      t = title.split()
+  with codecs.open('temp_title','r','utf-8') as pdf_text:
+    for line in pdf_text:
+      title = clean_up_and_lower(line.strip())
       print title
-      
-  # We think we have the beginning of a title
-  rest = ''
-  # Let's join titles that are obviously split over two lines.. 
-  while (not t[-1][0].isupper() and not t[-1][0].isdigit()) or (t[-1][-1] == ':'): 
-    next = pdf_text.readline().strip()
-    if next.isdigit() or next == '' or len(next) == 1 or any([x in next for x in bad_title_first_words]):
+      print title.split()
+      if title.isdigit() or title == '' or len(title.split()) == 1 or any([x in title for x in lower_bad_title]) or any([y in title.split() for y in singles]) or copyright_notice.match(title) or journal_citation.match(title):
+        continue
       break
     else:
-      rest += (' '+next) 
-      t = next.split()
+      raise ValueError('No title found.')
+
+    print 'Good title',title
+    print title.split()
+    t = title.split()
+    print len(t)
+    while len(t) == 1:
+      print title
+      ri = raw_input('Would you like to skip this? y/n')
+      if ri == 'y':
+        title = pdf_text.readline().strip()
+        t = title.split()
+        print title
+
+    # We think we have the beginning of a title
+    rest = ''
+    # Let's join titles that are obviously split over two lines.. 
+    while (not t[-1][0].isupper() and not t[-1][0].isdigit()) or (t[-1][-1] == ':'): 
+      next = pdf_text.readline().strip()
+      if next.isdigit() or next == '' or len(next) == 1 or any([x in next for x in bad_title_first_words]):
+        break
+      else:
+        rest += (' '+next) 
+        t = next.split()
 
   title = '_'.join((title+rest).split())
   # Reencode the title into ASCII after normalizing the Unicode.
