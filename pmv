@@ -1,6 +1,7 @@
 #!/usr/bin/python
-import sys
+import codecs
 import os
+import sys
 import tempfile
 
 # Usage:
@@ -33,13 +34,12 @@ print 'Saving output to',paper_dir
 for pdf_name in files:
   _, tmp_name = tempfile.mkstemp()
   try:
-    with open(tmp_name, 'w') as tmp_file:
-      with open(pdf_name, 'r') as pdf_file:
-        parse_first_page(pdf_file, tmp_file)
+    with open(pdf_name, 'r') as pdf_file, open(tmp_name, 'w') as tmp_file:
+      parse_first_page(pdf_file, tmp_file)
+    print 'Successfully parsed', pdf_name
     with codecs.open(tmp_name,'r','utf-8') as pdf_text:
       title = guess_title(pdf_text)
     fn = title_rename(title, pdf_name)
     os.rename(fn, paper_dir + fn)
-  except:
+  finally:
     os.remove(tmp_name)
-    raise
