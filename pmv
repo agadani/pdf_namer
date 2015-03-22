@@ -3,6 +3,7 @@ import codecs
 import os
 import sys
 import tempfile
+import traceback
 
 # Usage:
 # ./pmv <files to rename>
@@ -41,5 +42,7 @@ for pdf_name in files:
       title = guess_title(pdf_text)
     fn = title_rename(title, pdf_name)
     os.rename(fn, paper_dir + fn)
+  except Exception:
+    traceback.print_exc()
   finally:
     os.remove(tmp_name)
