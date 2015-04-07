@@ -1,6 +1,9 @@
 #!/usr/bin/python
-import sys
+import codecs
 import os
+import sys
+import tempfile
+import traceback
 
 # Usage:
 # ./pmv <files to rename>
@@ -12,7 +15,7 @@ import os
 #
 # or simply modify this file.
 
-renamepath = '' # Input the path to rename_by_title.py.  It is pure laziness
+renamepath = '~/code/scripts/pdf_namer/' # Input the path to rename_by_title.py.  It is pure laziness
                 # that prevents this from being packaged.
 
 while renamepath == '':
@@ -25,11 +28,21 @@ if sys.argv[1] == '--dir':
   paper_dir = sys.argv[2]
   sys.argv.pop(1)
   sys.argv.pop(1)
-else: 
-  paper_dir = '.'
+else:
+  paper_dir = './'
 files = sys.argv[1:]
 print 'Saving output to',paper_dir
-for f in files:
-  t = get_title(f)
-  fn = title_rename(t,f)
-  os.rename(fn,paper_dir+fn)
+for pdf_name in files:
+  _, tmp_name = tempfile.mkstemp()
+  try:
+    with open(pdf_name, 'r') as pdf_file, open(tmp_name, 'w') as tmp_file:
+      parse_first_page(pdf_file, tmp_file)
+    print 'Successfully parsed', pdf_name
+    with codecs.open(tmp_name,'r','utf-8') as pdf_text:
+      title = guess_title(pdf_text)
+    fn = title_rename(title, pdf_name)
+    os.rename(fn, paper_dir + fn)
+  except Exception:
+    traceback.print_exc()
+  finally:
+    os.remove(tmp_name)
