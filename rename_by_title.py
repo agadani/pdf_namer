@@ -30,7 +30,7 @@ def guess_title(pdf_text):
   for x in ['a','i','m','n','e']:
     singles.remove(x)
   # print singles
-  bad_title_first_words=[' USA','Proceedings of','LETTER','Journal of','ARTICLE','ar ticle','Communicated by','Communicated_by','anuscript','Public Access',' S ','USENIX','PERSPECTIVES','Brevia','COMMUN ','PHYSICAL REVIEW','Conference','Symantec Research','Symposium','Vol','IEEE','Editors','Published by','Published in','Permissions','email','doi','Higher-Order Symb Comput','University','no.','Issue','pp.','Society','Report','Dissertation','Thesis','Editor','Association','Computer Science','consideration','publication']
+  bad_title_first_words=[' USA','Proceedings of','LETTER','Journal of','ARTICLE','ar ticle','Communicated by','Communicated_by','anuscript','Public Access',' S ','USENIX','PERSPECTIVES','Brevia','COMMUN ','PHYSICAL REVIEW','Conference','Symantec Research','Symposium','Vol','IEEE','Editor','Published','Permissions','email','doi','Higher-Order Symb Comput','University','no.','Issue','pp.','Society','Report','Dissertation','Thesis','Editor','Association','Computer Science','consideration','publication','faculty','Department','Software Engineering','submission','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday','January','February','March','April','June','July','August','September','October','November','December']
 
   copyright_notice = re.compile(ur'\(?c\)?\S*\s+\d{4}\s+(\w+\s*)+')
   # Using the PyPi regex package, it would be possible to use the
