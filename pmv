@@ -55,7 +55,7 @@ for input_name in files:
         subprocess.check_call(['pdftotext', input_name, tmp_name])
         print('Successfully parsed %s with pdftotext.' % input_name)
         title = guess_title(tmp_name, 'utf-8')
-      except TitleError:
+      except (TitleError, OSError):
         # Try PDFMiner if pdftotext fails or isn't available.
         with open(input_name, 'r') as pdf_file, open(tmp_name, 'w') as tmp_file:
           pdf_miner(pdf_file, tmp_file)
