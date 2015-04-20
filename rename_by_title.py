@@ -24,7 +24,6 @@ def pdf_miner(pdf_file, tmp_file):
   for page in PDFPage.get_pages(pdf_file, maxpages=2):
       interpreter.process_page(page)
 
-
 def clean_up_and_lower(title_string):
   '''Remove fancy characters that break things'''
   badchars = ('_','.','!','?')
@@ -61,8 +60,8 @@ def guess_title(txt_name, codec):
 
   lower_bad_title = [x.lower() for x in bad_title_first_words]
 
-  with codecs.open(txt_name, 'r', codec) as pdf_text:
-    for line in pdf_text:
+  with codecs.open(txt_name, 'r', codec) as text_file:
+    for line in text_file:
       title = clean_up_and_lower(line.strip())
       # print(type(title))
       print(title)
@@ -85,7 +84,7 @@ def guess_title(txt_name, codec):
       print(title)
       ri = raw_input('Would you like to skip this? y/n')
       if ri == 'y':
-        title = pdf_text.readline().strip()
+        title = text_file.readline().strip()
         t = title.split()
         print(title)
 
@@ -94,7 +93,7 @@ def guess_title(txt_name, codec):
     # Let's join titles that are obviously split over two lines.. 
     while ((not t[-1][0].isupper() and not t[-1][0].isdigit()) or 
            (t[-1][-1] == ':')):
-      next = pdf_text.readline().strip()
+      next = text_file.readline().strip()
       if (next.isdigit() or next == '' or len(next) == 1 or 
           any(x in next for x in bad_title_first_words)):
         break
@@ -123,8 +122,8 @@ def title_rename(title, fn, extension):
 
 if __name__ == '__main__':
   fn = sys.argv[1]
-  with codecs.open(fn,'r','utf-8') as pdf_text:
-    title = guess_title(pdf_text)
-  if len(sys.argv)>2:
+  with codecs.open(fn, 'r', 'utf-8') as text_file:
+    title = guess_title(text_file, 'utf-8')
+  if len(sys.argv) > 2:
     if sys.argv[2] == '-r':
-      title_rename(title,fn)
+      title_rename(title, fn)
