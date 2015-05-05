@@ -143,14 +143,19 @@ def guess_title(txt_name, codec):
     # including lines after the title.  These lines are usually the
     # authors, anyways, which at least is not useless information even
     # if it leads to overlong file names.  One problem here that can't
-    # be solved with any simple heuristic is that titles are split
-    # with blank lines in between, but blank lines are more reliably
-    # the terminator for a title.
+    # be solved with any simple heuristic is that some titles are
+    # split with blank lines in between, but blank lines are more
+    # reliably the terminator for a title.
 
     # We think we have the beginning of a title.  If a title ends with
     # a colon or a hyphen or a word starting with a lower-case letter,
-    # it's clearly split over lines.  Otherwise, if the next line
-    # would be an acceptable title, include it.
+    # it's probably split over lines.  Otherwise, if the title is
+    # shorter than a certain length, look at the next line anyways.
+    # Increasing the length limit would catch some longer titles but
+    # would increase the false positive rate for adding authors to the
+    # end of the title.  Arguably, an effective limit on title length
+    # is useful for reducing the number of file names that span
+    # multiple lines.
     while (title[-1].endswith((':', '-')) or title[-1][0].islower() or
            len(title) < 7):
       line = clean_up(next(text_file))
@@ -160,7 +165,8 @@ def guess_title(txt_name, codec):
         title += split_legible.findall(line)
         print(title)
 
-  if sum(w.isupper() for w in title) > len(title) // 2:
+  # Titles THAT ARE MOSTLY or ALL CAPS need to have their casing changed.
+  if sum(w.isupper() for w in title) > len(title) / 2:
     title = '_'.join(w.capitalize() for w in title)
   else:
     title = '_'.join(title)
